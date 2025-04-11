@@ -1,0 +1,5 @@
+package com.boardMvc.service;
+
+public interface BoardService {
+
+}

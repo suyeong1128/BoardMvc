@@ -1,0 +1,5 @@
+package com.boardMvc.controller;
+
+public class BoardController {
+
+}

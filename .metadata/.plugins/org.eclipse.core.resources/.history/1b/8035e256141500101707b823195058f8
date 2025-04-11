@@ -1,0 +1,49 @@
+package com.boardMvc.dao;
+
+import java.sql.ResultSet;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+
+import com.boardMvc.dto.UserDto;
+
+@Repository
+public class UserDaoImpl implements UserDao{
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
+	
+	@Override
+	public void insertUser(UserDto user) {
+		String sql = "INSERT INTO custom_user(name, birth, nickName, email, address, phone, password) VALUES(?, ?, ?, ?, ?, ?, ?)";
+		jdbcTemplate.update(sql, user.getName(), user.getBirth(), user.getNickName(), user.getEmail(), user.getAddress(), user.getPhone(), user.getPassword());
+	}
+	
+	@Override
+	public boolean existEmail(String email) {
+		String sql = "SELECT COUNT(*) FROM custom_user WHERE email=?";
+		Integer count = jdbcTemplate.queryForObject(sql, Integer.class, email);
+		return count != 1 && count > 0;
+	}
+	
+	@Override
+	public UserDto getUserByEmailAndPassword(String email, String password) {
+		String sql = "SELECT * FROM custom_user WHERE email=? AND password=?";
+		
+		try {
+			return jdbcTemplate.queryForObject(sql, new Object[]{email, password}, new RowMapper<UserDto>() {
+				@Override
+				public UserDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+					UserDto user = new UserDto();
+					user.setEmail(rs.getString("email"));
+					user.setPassword(rs.getString("password"));
+					return user;
+				}
+			});
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+}

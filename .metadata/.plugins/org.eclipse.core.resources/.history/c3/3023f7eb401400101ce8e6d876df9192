@@ -1,0 +1,5 @@
+package com.boardMvc.dto;
+
+public class UserDao {
+
+}

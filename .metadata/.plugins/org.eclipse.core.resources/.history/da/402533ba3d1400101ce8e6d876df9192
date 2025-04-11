@@ -1,0 +1,25 @@
+package com.boardMvc.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+public class UserController {
+	
+	@Autowired
+	MainService mainService
+	
+	@RequestMapping("login")
+	public String login() {
+		return "user/login";
+	}
+	
+	@RequestMapping("register")
+	public String register() {
+		return "user/register";
+	}
+	
+	@RequestMapping("forgot-password")
+	public String forgot_password() {
+		return "user/forgot-password";
+	}
+}

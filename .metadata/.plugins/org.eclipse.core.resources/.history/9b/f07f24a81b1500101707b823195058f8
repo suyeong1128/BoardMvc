@@ -1,0 +1,68 @@
+package com.boardMvc.controller;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.boardMvc.dao.UserDao;
+import com.boardMvc.dto.UserDto;
+import com.boardMvc.service.MainService;
+
+import jakarta.validation.Valid;
+
+@Controller
+public class UserController {
+	
+	@Autowired
+	private UserDao userDao;
+	
+	@PostMapping("/register/process")
+    public String register(UserDto user, BindingResult result, Model model) {
+		try {
+			userDao.insertUser(user);
+			return "redirect:/login";
+		} catch (Exception e) {
+			model.addAttribute("errorMessae", "회원 가입 중 요류가 발생했습니다.");
+			return "redirect:/register";
+		}
+    }
+	
+	@PostMapping("/login")
+	public String login(@RequestParam String email,
+						@RequestParam String password,
+						Model model,
+						jakarta.servlet.http.HttpSession session) {
+		UserDto user = userDao.getUserByEmailAndPassword(email, password);
+		
+		if(user != null) {
+			session.setAttribute("user", user);
+			return "redirect:/";
+		} else {
+			model.addAttribute("loginError", "이메일 또는 비밀번호가 잘못되었습니다.");
+			return "/login";
+		}
+	}
+	
+	@GetMapping("/check-email")
+	@ResponseBody
+	public Map<String, Object> checkemail(@RequestParam String email) {
+		boolean exists = userDao.existEmail(email);
+		Map<String, Object> response = new HashMap<>();
+		response.put("exists", exists);
+		return response;
+	}
+
+    @GetMapping("/login")
+    public String loginPage() {
+        return "user/login"; // 로그인 페이지 경로
+    }
+} 

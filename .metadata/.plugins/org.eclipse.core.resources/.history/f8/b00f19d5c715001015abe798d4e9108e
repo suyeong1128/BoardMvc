@@ -1,0 +1,71 @@
+package com.boardMvc.controller;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.boardMvc.dao.UserDao;
+import com.boardMvc.dao.UserDaoImpl;
+import com.boardMvc.dto.UserDto;
+import com.boardMvc.service.MainService;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
+@Controller
+public class MainController {
+	
+	@Autowired
+	MainService mainService;
+	
+	@RequestMapping("/")
+	public String main(HttpSession session, HttpServletRequest request, Model model) {
+		UserDto user = (UserDto) session.getAttribute("user");
+		
+		if(user == null) {
+			Cookie[] cookies = request.getCookies();
+			if(cookies != null) {
+				for(Cookie cookie : cookies) {
+					if("rememberMe".equals(cookie.getName())) {
+						String email = cookie.getValue();
+						user = userDao.getUserByEmail(email);
+						if(user != null) {
+							session.setAttribute("user", user);
+						}
+						break;
+					}
+				}
+			}
+		}
+		
+		String username = (user != null) ? user.getNickName() : "guest";
+		model.addAttribute("username", username);
+		
+		String main = mainService.main();
+		
+		return "index";
+	}
+
+	@RequestMapping("/login")
+	public String login() {
+		return "user/login";
+	}
+	
+	@RequestMapping("/register")
+	public String register() {
+		return "user/register";
+	}
+	
+	@RequestMapping("/forgot-password")
+	public String forgot_password() {
+		return "user/forgot-password";
+	}
+	
+	@RequestMapping("/board")
+	public String board() {
+		return "board/tables";
+	}
+}

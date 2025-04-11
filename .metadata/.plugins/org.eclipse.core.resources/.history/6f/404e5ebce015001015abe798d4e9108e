@@ -1,0 +1,23 @@
+package com.boardMvc.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import jakarta.servlet.http.HttpSession;
+
+@Controller
+public class BoardController {
+	@RequestMapping("/write")
+	public String write() {
+		return "board/write";
+	}
+	
+	@PostMapping("/insert")
+	public String insertBoard(@RequestParam String title,
+			                  @RequestParam String bcontent,
+			                  HttpSession session) {
+		
+	}
+}

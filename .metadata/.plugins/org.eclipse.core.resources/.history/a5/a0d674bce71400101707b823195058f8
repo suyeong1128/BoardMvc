@@ -1,0 +1,7 @@
+package com.boardMvc.dao;
+
+import com.boardMvc.dto.UserDto;
+
+public interface UserDao {
+	void insertUser(UserDto user);
+}

@@ -1,0 +1,37 @@
+package com.boardMvc.controller;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.boardMvc.service.MainService;
+
+import jakarta.servlet.http.HttpSession;
+
+@Controller
+public class MainController {
+	
+	@Autowired
+	MainService mainService;
+	
+	@RequestMapping("/")
+	public String main(Htt session, Model model) {
+		String username = (String) session.getAttribute("username");
+		if(username == null) {
+			username="guest";
+		}
+		model.addAttribute("username", username);
+		
+		String main = mainService.main();
+		System.out.println(main);
+		return "index";
+	}
+
+	@RequestMapping("/login")
+	public String login() {
+		
+		return "login";
+	}
+}

@@ -1,0 +1,30 @@
+package com.boardMvc.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.boardMvc.dao.UserDao;
+import com.boardMvc.dto.UserDto;
+import com.boardMvc.service.MainService;
+
+@Controller
+public class UserController {
+	
+	@Autowired
+	private UserDao userDao;
+	
+	@PostMapping("/register")
+    public String register(UserDto user) {
+        // 비밀번호 확인 일치 여부는 따로 처리 가능
+        userDao.insertUser(user);
+        return "redirect:/login"; // 로그인 페이지로 이동
+    }
+
+    @GetMapping("/login")
+    public String loginPage() {
+        return "user/login"; // 로그인 페이지 경로
+    }
+}

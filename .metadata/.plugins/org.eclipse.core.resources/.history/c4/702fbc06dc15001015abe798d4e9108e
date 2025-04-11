@@ -1,0 +1,5 @@
+package com.boardMvc.dao;
+
+public interface BoardDao {
+	void insertBoard(BoardDto board);
+}
