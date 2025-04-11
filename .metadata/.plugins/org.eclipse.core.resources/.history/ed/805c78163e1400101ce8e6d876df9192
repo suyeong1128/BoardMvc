@@ -1,8 +1,0 @@
-package com.boardMvc.service;
-
-public interface MainService {
-
-	String main();
-	String user();
-
-}

@@ -1,9 +1,0 @@
-package com.boardMvc.dao;
-
-import com.boardMvc.dto.UserDto;
-
-public interface UserDao {
-	void insertUser(UserDto user);
-	boolean existEmail(String email);
-	UserDto getUserByEmailAndPassword(String email, String password);
-}

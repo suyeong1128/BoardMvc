@@ -1,5 +1,0 @@
-package com.boardMvc.dao;
-
-public interface UserDao {
-
-}
